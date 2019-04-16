@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from database_setup import Base, Restaurant, MenuItem
-from pprint import pprint
 
 engine = create_engine('sqlite:///restaurantMenu.db')
 Base.metadata.bind = engine
