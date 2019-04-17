@@ -40,8 +40,9 @@ class RestaurantRepository:
         session.add(result)
         session.commit()
 
-    def delete(self):
-        spinach = session.query(MenuItem).filter_by(
-            name='Spinach Ice Cream').one()
-        session.delete(spinach)
+    def delete(self, restaurantId):
+        result = session.query(Restaurant).filter_by(
+            id=restaurantId).one()
+        session.delete(result)
+        print("The restaurant with ID %s id being deleted" % restaurantId)
         session.commit()
