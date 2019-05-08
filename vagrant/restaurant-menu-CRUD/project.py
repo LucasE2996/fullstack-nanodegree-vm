@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash
+from flask import Flask, render_template, request, redirect, url_for, flash, jsonify
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from db.database_setup import Base, Restaurant, MenuItem
@@ -53,7 +53,8 @@ def editMenuItem(restaurant_id, menu_id):
             editedItem.name = request.form['name']
         session.add(editedItem)
         session.commit()
-        flash("Item id: " + str(editedItem.id) + " had its name changed to: " + str(editedItem.name))
+        flash("Item id: " + str(editedItem.id) +
+              " had its name changed to: " + str(editedItem.name))
         return redirect(url_for('restaurantMenu', restaurant_id=restaurant_id))
     else:
         return render_template(
@@ -73,6 +74,26 @@ def deleteMenuItem(restaurant_id, menu_id):
         return render_template(
             'deletemenuitem.html', restaurant_id=restaurant_id, menu_id=menu_id, item=deletedItem
         )
+
+
+# Making an API endpoint (REST)
+@app.route('/restaurant/<int:restaurant_id>/menu/JSON')
+def restaurantMenuRest(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
+    return jsonify(MenuItems=[i.serialize for i in items])
+
+
+@app.route('/restaurant/<int:restaurant_id>/<int:menu_id>/JSON')
+def menuItemRest(restaurant_id, menu_id):
+    item = session.query(MenuItem).filter_by(id=menu_id).one()
+    return jsonify(MenuItem=item.serialize)
+
+
+@app.route('/restaurant/<int:restaurant_id>/JSON')
+def restaurantRest(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=restaurant_id).one()
+    return jsonify(Restaurant=restaurant.serialize)
 
 
 if __name__ == '__main__':
