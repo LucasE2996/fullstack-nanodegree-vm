@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link href='http://fonts.googleapis.com/css?family=Roboto:400,300,700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	<link rel=stylesheet type=text/css href="{{ url_for('static', filename='main.css') }}">
+
+	<meta charset="utf-8">
+	<!-- As google+ API was shut down by google, I had to use this one -->
+	<meta name="google-signin-client_id"
+		content="810960242143-c5kduno4sntc4m5k8u5sdmh4o7mn9ucu.apps.googleusercontent.com">
+
+	<!--LOAD PRE-REQUISITES FOR GOOGLE SIGN IN -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js">
+	</script>
+
+	<script src="https://apis.google.com/js/platform.js" async defer> </script>
+
+	<!-- END PRE-REQUISITES FOR GOOGLE SIGN IN -->
+
+	<script>
+		function onSignIn(googleUser) {
+			console.log('on sign in function called!');
+			var id_token = googleUser.getAuthResponse().id_token;
+
+			var profile = googleUser.getBasicProfile();
+			console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+			console.log('Name: ' + profile.getName());
+			console.log('Image URL: ' + profile.getImageUrl());
+			console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+
+
+			$.ajax({
+				type: 'POST',
+				url: '/googleconnect?state={{STATE}}',
+				data: id_token,
+				contentType: 'application/octet-stream; charset=utf-8',
+				success: function (result) {
+					console.log('SUCCESS!');
+					window.location.replace("http://localhost:5000")
+				},
+				error: function (result) {
+					console.log('ERROR!');
+					console.log(result);
+				}
+			})
+		}
+
+		function signOut() {
+			var auth2 = gapi.auth2.getAuthInstance();
+			auth2.signOut().then(function () {
+
+				$.ajax({
+					type: 'POST',
+					url: '/gdisconnect',
+					contentType: 'application/octet-stream; charset=utf-8',
+					success: function (result) {
+						console.log('LOGOUT SUCCESS!');
+						window.location.replace("http://localhost:5000")
+					},
+					error: function (result) {
+						console.log('LOGOUT ERROR!');
+						console.log(result);
+					}
+				});
+
+				console.log('User signed out.');
+			});
+		}
+
+		function onLoad() {
+			gapi.load('auth2', function () {
+				gapi.auth2.init();
+			});
+		}
+
+		window.onload = onLoad;
+	</script>
+</head>
+
+<body>
+	<div class="container">
+		{% block content %}
+		{% endblock %}
+	</div>
+</body>
+
+</html>
