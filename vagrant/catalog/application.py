@@ -255,7 +255,8 @@ def editCategory(category_id):
             flash('Category Successfully Edited')
             return redirect(url_for('showCategories'))
     else:
-        return render_template('editCategory.html', category=editedCategory)
+        category = categoryRepository.readById(category_id)
+        return render_template('editCategory.html', category=category)
 
 
 # Delete a category
@@ -263,30 +264,26 @@ def editCategory(category_id):
 def deleteCategory(category_id):
     if 'username' not in login_session:
         return redirect('/login')
-    categoryToDelete = session.query(
-        Category).filter_by(id=category_id).one()
     if request.method == 'POST':
-        session.delete(categoryToDelete)
-        flash('%s Successfully Deleted' % categoryToDelete.name)
-        session.commit()
+        categoryRepository.delete(category_id)
+        flash('Successfully Deleted')
         return redirect(url_for('showCategories', category_id=category_id))
     else:
-        return render_template('deleteCategory.html', category=categoryToDelete)
+        category = categoryRepository.readById(category_id)
+        return render_template('deleteCategory.html', category=category)
 
 # Show a category item
 @app.route('/category/<int:category_id>/')
 @app.route('/category/<int:category_id>/item/')
 def showItem(category_id):
-    category = session.query(Category).filter_by(id=category_id).one()
-    items = session.query(CategoryItem).filter_by(
-        category_id=category_id).all()
+    category = categoryRepository.readById(category_id)
+    items = categoryItemRepository.readAllByCategoryId(category_id)
     if 'username' not in login_session:
-        creator = getUserInfo(category.user_id)
-        print('with creator')
+        creator = userRepository.readById(category.user_id)
         return render_template('publicItem.html', items=items, category=category, creator=creator)
     else:
-        user = getUserInfo(getUserID(login_session['email']))
-        print('with user')
+        userId = userRepository.getUserID(login_session['email'])
+        user = userRepository.readById(userId)
         return render_template('item.html', items=items, category=category, user=user)
 
 
@@ -296,61 +293,55 @@ def newCategoryItem(category_id):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        newItem = CategoryItem(
+        userId = userRepository.getUserID(login_session['email'])
+        categoryItemRepository.create(
             name=request.form['name'],
             description=request.form['description'],
             price=request.form['price'],
-            course=request.form['course'],
             category_id=category_id,
-            user_id=getUserID(login_session['email']))
-        session.add(newItem)
-        session.commit()
-        flash('New Item %s Item Successfully Created' % (newItem.name))
+            user_id=userId
+        )
+        flash('New Item Item Successfully Created')
         return redirect(url_for('showItem', category_id=category_id))
     else:
-        return render_template('newCategoryItem.html', category_id=category_id)
+        return render_template('newCategoryItem.html', category_id = category_id)
 
 
-# Edit a item item
-@app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
+# Edit a category item
+@app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods = ['GET', 'POST'])
 def editCategoryItem(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
-    editedItem = session.query(CategoryItem).filter_by(id=item_id).one()
     if request.method == 'POST':
-        if request.form['name']:
-            editedItem.name = request.form['name']
-        if request.form['description']:
-            editedItem.description = request.form['description']
-        if request.form['price']:
-            editedItem.price = request.form['price']
-        if request.form['course']:
-            editedItem.course = request.form['course']
-        session.add(editedItem)
-        session.commit()
+        categoryItemRepository.update(
+            item_id,
+            request.form['name'],
+            request.form['price'],
+            request.form['description']
+        )
         flash('Item Item Successfully Edited')
         return redirect(url_for('showItem', category_id=category_id))
     else:
-        return render_template('editCategoryItem.html', category_id=category_id, item_id=item_id, item=editedItem)
+        item = categoryItemRepository.readByCategoryId(category_id, item_id)
+        return render_template('editCategoryItem.html', category_id = category_id, item_id = item_id, item = item)
 
 
-# Delete a item item
-@app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
+# Delete a item
+@app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods = ['GET', 'POST'])
 def deleteCategoryItem(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
-    itemToDelete = session.query(CategoryItem).filter_by(id=item_id).one()
     if request.method == 'POST':
-        session.delete(itemToDelete)
-        session.commit()
+        categoryItemRepository.delete(item_id)
         flash('Item Item Successfully Deleted')
         return redirect(url_for('showItem', category_id=category_id))
     else:
-        return render_template('deleteCategoryItem.html', item=itemToDelete)
+        item = categoryItemRepository.readByCategoryId(category_id, item_id)
+        return render_template('deleteCategoryItem.html', item = item)
 
 
 if __name__ == '__main__':
-    app.env = 'development'
-    app.secret_key = 'super_secret_key'
-    app.debug = True
-    app.run(host='0.0.0.0', port=5000)
+    app.env='development'
+    app.secret_key='super_secret_key'
+    app.debug=True
+    app.run(host = '0.0.0.0', port = 5000)

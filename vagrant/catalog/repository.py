@@ -94,11 +94,11 @@ class CategoryItemRepository:
         session.add(result)
         session.commit()
 
-    def delete(self, categoryId):
+    def delete(self, itemId):
         result = session.query(CategoryItem).filter_by(
-            id=categoryId).first()
+            id=itemId).first()
         session.delete(result)
-        print("The category with ID %s id being deleted" % categoryId)
+        print("The category with ID %s id being deleted" % itemId)
         session.commit()
 
 
