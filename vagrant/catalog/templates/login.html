@@ -1,12 +1,19 @@
 {% extends "main.html" %}
 {% block content %}
-{% include "header.html" %}
+{% include "loginHeader.html" %}
 
-<!-- GOOGLE SIGN IN -->
-<div class="g-signin2" data-onsuccess="onSignIn"></div>
-<!-- END OF GOOGLE SIGN IN -->
-
-<!--FACEBOOK SIGN IN -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+    <div class="col-md-6">
+        <button>
+            <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
+                <a href='javascript:sendTokenToServer()'>Login with Facebook</a>
+            </fb:login-button>
+        </button>
+    </div>
+</div>
 <script>
     window.fbAsyncInit = function () {
         FB.init({
@@ -62,18 +69,4 @@
         });
     }
 </script>
-
-
-<button>
-
-
-    <fb:login-button scope="public_profile,email" onlogin="sendTokenToServer();">
-        <a href='javascript:sendTokenToServer()'>Login with Facebook</a>
-
-    </fb:login-button>
-
-
-</button>
-<!--END FACEBOOK SIGN IN -->
-
 {% endblock %}

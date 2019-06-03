@@ -51,6 +51,7 @@ def googleconnect():
     access_token = request.data
 
     try:
+        print("----------------->>>>>>>>>>>>>    step 2   <<<<<<<<<<<<<-----------------")
         # Specify the CLIENT_ID of the app that accesses the backend:
         idinfo = id_token.verify_oauth2_token(
             access_token, requests.Request(), CLIENT_ID)
@@ -59,6 +60,7 @@ def googleconnect():
         # idinfo = id_token.verify_oauth2_token(token, requests.Request())
         # if idinfo['aud'] not in [CLIENT_ID_1, CLIENT_ID_2, CLIENT_ID_3]:
         #     raise ValueError('Could not verify audience.')
+        print("----------------->>>>>>>>>>>>>    step 3   <<<<<<<<<<<<<-----------------")
 
         if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
             raise ValueError('Wrong issuer.')
@@ -72,14 +74,18 @@ def googleconnect():
 
         # Save user name to login session
         userId = userRepository.getUserID(idinfo['email'])
+    
+        print("----------------->>>>>>>>>>>>>    step 4   <<<<<<<<<<<<<-----------------")
 
         if userId is not None:
+            print("Hey I know this user, let me get the info...")
             currentUser = userRepository.readById(userId)
             login_session['username'] = currentUser.name
             login_session['email'] = currentUser.email
             login_session['picture'] = currentUser.picture
             login_session['access_token'] = usertokenid
         else:
+            print("Who are you??? Ok... Let me create you here")
             login_session['username'] = idinfo['name']
             login_session['email'] = idinfo['email']
             login_session['picture'] = idinfo['picture']
@@ -87,16 +93,17 @@ def googleconnect():
             userRepository.create(
                 login_session['username'], login_session['email'], login_session['picture'])
 
-    except ValueError:
+    except Exception, e:
         # Invalid token
-        pass
+        print(e)
+        response = make_response(json.dumps('LOGIN FAILED!'), 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
 
-    output = ''
-    output += '<h1>Welcome' + str(login_session['username']) + '!'
-    output += '<h4>You are logged in with email: ' + \
-        str(login_session['email']) + '</h4>'
-    return output
-
+    print("LOGIN SUCESS!")
+    response = make_response(json.dumps('Login Success!'), 200)
+    response.headers['Content-Type'] = 'application/json'
+    return response
 
 @app.route('/gdisconnect', methods=['GET', 'POST'])
 def gdisconnect():

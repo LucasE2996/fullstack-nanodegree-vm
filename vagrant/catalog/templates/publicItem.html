@@ -1,16 +1,16 @@
 {% extends "main.html" %}
 {% block content %}
-{% include "header.html" %}
+{% include "publicHeader.html" %}
 
 <div class="row divider green">
 	<div class="col-md-12"></div>
 </div>
-<div class="row banner menu">
+<div class="row banner">
 	<div class="col-md-11 col-md-offset-1 padding-none">
 		<h1>{{ category.name }}
 			<figure class="creator">
 				<img src="{{ creator.picture}}">
-				<figcaption>{{ creator.name }}</figcaption>
+				<figcaption>Owner: {{ creator.name }}</figcaption>
 			</figure>
 		</h1>
 
@@ -40,51 +40,12 @@
 <div class="row">
 	<div class="col-md-1"></div>
 	<div class="col-md-3">
-		<h2>Appetizers</h2>
 		{% for i in items %}
 		{% if i.course == 'Appetizer' %}
 		<div class="item">
 			<h3>{{i.name}}</h3>
 			<p>{{i.description}}</p>
 			<p class="menu-price">{{i.price}}</p>
-
-		</div>
-		{% endif %}
-		{% endfor %}
-	</div>
-	<div class="col-md-4">
-		<h2>Entrees</h2>
-		{% for i in items %}
-		{% if i.course == 'Entree' %}
-		<div class="item">
-			<h3>{{i.name}}</h3>
-			<p>{{i.description}}</p>
-			<p class="menu-price">{{i.price}}</p>
-
-		</div>
-		{% endif %}
-		{% endfor %}
-	</div>
-	<div class="col-md-3">
-		<h2>Desserts</h2>
-		{% for i in items %}
-		{% if i.course == 'Dessert' %}
-		<div class="item">
-			<h3>{{i.name}}</h3>
-			<p>{{i.description}}</p>
-			<p class="menu-price">{{i.price}}</p>
-
-		</div>
-		{% endif %}
-		{% endfor %}
-		<h2>Beverages</h2>
-		{% for i in items %}
-		{% if i.course == 'Beverage' %}
-		<div class="item">
-			<h3>{{i.name}}</h3>
-			<p>{{i.description}}</p>
-			<p class="menu-price">{{i.price}}</p>
-
 		</div>
 		{% endif %}
 		{% endfor %}

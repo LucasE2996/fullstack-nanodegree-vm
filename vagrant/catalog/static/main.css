@@ -3,43 +3,47 @@
 	font-weight: 700;
 }
 
+body {
+	background-color: #23272a;
+}
+
 h1 {
 	font-family: "Helvetica Neue Light", Roboto, Helvetica, Arial, sans-serif;
 	font-size: 50px;
-	color: #51453B;
+	color: #ffffff;
 	line-height: 60px;
 	font-weight: 300;
 }
 
 h2 {
 	font-size: 24px;
-	color: #42C3C9;
+	color: #7289da;
 	line-height: 29px;
 }
 
 h3 {
 	font-size: 18px;
-	color: #4A4A4A;
-	line-height: 23px;
+	color: #99aab5;
+	line-height: 5px;
 }
 
 p {
 	font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;
 	font-size: 16px;
-	color: #7B7573;
+	color: #99aab5;
 	line-height: 24px;
 	font-weight: 400;
 }
 
 strong {
 	font-size: 16px;
-	color: #7B7573;
+	color: #99aab5;
 	line-height: 24px;
 }
 
 a {
 	font-size: 14px;
-	color: #0093B9;
+	color: #7289da;
 	line-height: 17px;
 }
 
@@ -100,16 +104,16 @@ a {
 	margin-bottom: 0;
 	line-height: 16px;
 	font-size: 16px;
-	color: #7B7573;
+	color: #99aab5;
 	font-weight: 400;
 }
 
 .divider {
-	height: 15px;
+	height: 2px;
 }
 
-.divider.blue {
-	background-color: #42C3C9;
+.divider.purple {
+	background-color: #7289da;
 }
 
 .divider.green {
@@ -118,15 +122,6 @@ a {
 
 .banner.main {
 	height: 150px;
-	background: url("/static/top-banner.jpg");
-	background-position: right;
-	background-repeat: no-repeat;
-	background-size: cover;
-}
-
-.banner.menu {
-	height: 150px;
-	background-color: #E1E17F;
 }
 
 .banner.profile {
@@ -138,24 +133,31 @@ a {
 	margin: 45px 0;
 }
 
-.restaurant-list {
-	background-color: #F0F0F0;
-	padding: 20px;
+.category-list {
+	border-radius: 5px;
+	border-left: 3px solid #7289da;
+	background-color: #2c2f33;
+	padding: 5px 15px;
+	transition: .2s;
 }
 
-.restaurant-list:hover {
-	background-color: #e1e17f;
-	padding: 20px;
+.category-list:hover {
+	/* background-color: #7289da; */
+	border-left: 10px solid #7289da;
 }
 
-.menu-item {
-	background: #F0F0F0;
+.category-list h3 {
+	margin: 10px;
+}
+
+.category-item {
+	background: #2c2f33;
 	padding: 20px;
 	margin: 20px;
 	margin-left: -20px;
 }
 
-.menu-price {
+.item-price {
 	font-weight: 700;
 }
 
@@ -173,7 +175,7 @@ a {
 
 .creator figcaption {
 	font-size: 14px;
-	color: #7B7573;
+	color: #99aab5;
 	font-weight: 400;
 	margin-top: -20px;
 }
