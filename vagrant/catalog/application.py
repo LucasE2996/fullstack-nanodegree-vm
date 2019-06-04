@@ -7,7 +7,6 @@ import random
 import string
 from repository import UserRepository, CategoryItemRepository, CategoryRepository
 
-# IMPORTS FOR THIS STEP
 from oauth2client.client import flow_from_clientsecrets
 from oauth2client.client import FlowExchangeError
 from google.oauth2 import id_token
@@ -28,7 +27,6 @@ categoryItemRepository = CategoryItemRepository()
 categoryRepository = CategoryRepository()
 
 
-# Create anti-forgery state token
 @app.route('/login')
 def showLogin():
     state = ''.join(random.choice(string.ascii_uppercase + string.digits)
@@ -208,7 +206,6 @@ def fbconnect():
     flash("Now logged in as %s" % login_session['username'])
     return output
 
-# JSON APIs to view Category Information
 @app.route('/category/<int:category_id>/items/JSON')
 def categoryItemsJSON(category_id):
     items = categoryItemRepository.readAllByCategoryId(category_id)
@@ -227,7 +224,6 @@ def categoriesJSON():
     return jsonify(categories=[r.serialize for r in categories])
 
 
-# Show all categories
 @app.route('/')
 @app.route('/category/')
 def showCategories():
@@ -239,7 +235,6 @@ def showCategories():
         print('private template')
         return render_template('categories.html', categories=categories)
 
-# Create a new category
 @app.route('/category/new/', methods=['GET', 'POST'])
 def newCategory():
     if 'username' not in login_session:
@@ -252,7 +247,6 @@ def newCategory():
     else:
         return render_template('newCategory.html')
 
-# Edit a category
 @app.route('/category/<int:category_id>/edit/', methods=['GET', 'POST'])
 def editCategory(category_id):
     if 'username' not in login_session:
@@ -267,7 +261,6 @@ def editCategory(category_id):
         return render_template('editCategory.html', category=category)
 
 
-# Delete a category
 @app.route('/category/<int:category_id>/delete/', methods=['GET', 'POST'])
 def deleteCategory(category_id):
     if 'username' not in login_session:
@@ -280,7 +273,6 @@ def deleteCategory(category_id):
         category = categoryRepository.readById(category_id)
         return render_template('deleteCategory.html', category=category)
 
-# Show a category item
 @app.route('/category/<int:category_id>/')
 @app.route('/category/<int:category_id>/item/')
 def showItem(category_id):
@@ -299,7 +291,6 @@ def showItem(category_id):
             return render_template('item.html', items=items, category=category, user=currentUser)
 
 
-# Create a new item
 @app.route('/category/<int:category_id>/item/new/', methods=['GET', 'POST'])
 def newCategoryItem(category_id):
     if 'username' not in login_session:
@@ -319,7 +310,6 @@ def newCategoryItem(category_id):
         return render_template('newCategoryItem.html', category_id=category_id)
 
 
-# Edit a category item
 @app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def editCategoryItem(category_id, item_id):
     if 'username' not in login_session:
@@ -338,7 +328,6 @@ def editCategoryItem(category_id, item_id):
         return render_template('editCategoryItem.html', category_id=category_id, item_id=item_id, item=item)
 
 
-# Delete a item
 @app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteCategoryItem(category_id, item_id):
     if 'username' not in login_session:

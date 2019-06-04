@@ -135,7 +135,7 @@ a {
 	align-items: center;
 }
 
-.banner > div {
+.banner>div {
 	height: max-content;
 }
 
@@ -148,7 +148,6 @@ a {
 }
 
 .category-list:hover {
-	/* background-color: #7289da; */
 	border-left: 10px solid #7289da;
 }
 

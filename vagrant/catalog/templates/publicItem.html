@@ -1,9 +1,9 @@
 {% extends "main.html" %}
 {% block content %}
 {% if loggedIn == True %}
-	{% include "header.html" %}
+{% include "header.html" %}
 {% else %}
-	{% include "publicHeader.html" %}
+{% include "publicHeader.html" %}
 {% endif %}
 
 <div class="row divider green">
@@ -42,18 +42,18 @@
 </div>
 {% if items !=[] %}
 <div class="row">
-		<div class="col-md-1"></div>
-		<div class="col-md-10">
-			<h2>Items</h2>
-			{% for i in items %}
-			<div class="category-item">
-				<h3>{{i.name}}</h3>
-				<p>{{i.description}}</p>
-				<p class="menu-price">{{i.price}}</p>
-			</div>
-			{% endfor %}
+	<div class="col-md-1"></div>
+	<div class="col-md-10">
+		<h2>Items</h2>
+		{% for i in items %}
+		<div class="category-item">
+			<h3>{{i.name}}</h3>
+			<p>{{i.description}}</p>
+			<p class="menu-price">{{i.price}}</p>
 		</div>
-		<div class="col-md-1"></div>
+		{% endfor %}
 	</div>
+	<div class="col-md-1"></div>
+</div>
 {% endif %}
 {% endblock %}
