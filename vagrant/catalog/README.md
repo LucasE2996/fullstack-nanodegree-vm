@@ -1,6 +1,6 @@
 # NANODEGREE PROJECT 4 - catalog web app
 
-To run this project you will need to have these tools installed:
+To run this project you will need the following tool to be installed:
 - vagrant
 
 ## How to run the project
