@@ -20,9 +20,9 @@ Now access the VM with:
 $ vagrant ssh
 ```
 
-The project is located at */vagrant*. To access it type:
+The project is located at */vagrant/catalog*. To access it type:
 ```console
-$ cd /vagrant
+$ cd /vagrant/catalog
 ```
 
 Now that everything is setup run the project:
