@@ -27,7 +27,7 @@ h3 {
 	line-height: 5px;
 }
 
-p {
+p, label {
 	font-family: "Helvetica Neue", Roboto, Helvetica, Arial, sans-serif;
 	font-size: 16px;
 	color: #99aab5;
@@ -59,21 +59,29 @@ a {
 	margin-right: 30px;
 }
 
+.margin-bottom {
+	margin-bottom: 30px;
+}
+
 .padding-none {
 	padding: 0;
 }
 
 .btn {
-	padding: 20px;
+	padding: 8px;
 	margin: 0;
-	border-color: #9FB80A;
+	border-color: #84f2b3;
 	border-width: 2px;
-	color: #9FB80A;
-	;
+	color: #84f2b3;
+	background: #2c2f33;
+}
+
+.btn i {
+	margin: 3px;
 }
 
 .btn:hover {
-	border-color: #9FB80A;
+	border-color: #76dba2;
 }
 
 .btn.delete {
@@ -117,20 +125,18 @@ a {
 }
 
 .divider.green {
-	background-color: #9FB80A;
+	background-color: #84f2b3;
 }
 
-.banner.main {
-	height: 150px;
+.banner {
+	height: 160px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
 }
 
-.banner.profile {
-	height: 150px;
-	background-color: #A6E8EB;
-}
-
-.banner h1 {
-	margin: 45px 0;
+.banner > div {
+	height: max-content;
 }
 
 .category-list {
@@ -155,6 +161,7 @@ a {
 	padding: 20px;
 	margin: 20px;
 	margin-left: -20px;
+	border-left: 3px solid #7289da;
 }
 
 .item-price {
@@ -162,9 +169,7 @@ a {
 }
 
 .creator {
-	padding-right: 20px;
-	margin-top: -20px;
-	text-align: right;
+	text-align: center;
 	float: right;
 }
 
@@ -181,7 +186,7 @@ a {
 }
 
 .flash {
-	background-color: #98FB98;
+	background-color: #7289da;
 	width: 100%;
 	text-decoration: none;
 }
@@ -189,4 +194,18 @@ a {
 .flash li {
 	list-style-type: none;
 	text-align: center;
+}
+
+.flash li strong {
+	color: #fff !important;
+}
+
+input, textarea {
+	background-color: #2c2f33 !important;
+	color: #99aab5 !important;
+	border: 1px solid #99aab5 !important;
+}
+
+.creator figcaption {
+	margin-top: 8px;
 }

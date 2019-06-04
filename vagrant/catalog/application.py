@@ -74,7 +74,7 @@ def googleconnect():
 
         # Save user name to login session
         userId = userRepository.getUserID(idinfo['email'])
-    
+
         print("----------------->>>>>>>>>>>>>    step 4   <<<<<<<<<<<<<-----------------")
 
         if userId is not None:
@@ -104,6 +104,7 @@ def googleconnect():
     response = make_response(json.dumps('Login Success!'), 200)
     response.headers['Content-Type'] = 'application/json'
     return response
+
 
 @app.route('/gdisconnect', methods=['GET', 'POST'])
 def gdisconnect():
@@ -287,11 +288,15 @@ def showItem(category_id):
     items = categoryItemRepository.readAllByCategoryId(category_id)
     if 'username' not in login_session:
         creator = userRepository.readById(category.user_id)
-        return render_template('publicItem.html', items=items, category=category, creator=creator)
+        return render_template('publicItem.html', items=items, category=category, creator=creator, loggedIn=False)
     else:
         userId = userRepository.getUserID(login_session['email'])
-        user = userRepository.readById(userId)
-        return render_template('item.html', items=items, category=category, user=user)
+        currentUser = userRepository.readById(userId)
+        creator = userRepository.readById(category.user_id)
+        if currentUser.id != creator.id:
+            return render_template('publicItem.html', items=items, category=category, creator=creator, loggedIn=True)
+        else:
+            return render_template('item.html', items=items, category=category, user=currentUser)
 
 
 # Create a new item
@@ -311,11 +316,11 @@ def newCategoryItem(category_id):
         flash('New Item Item Successfully Created')
         return redirect(url_for('showItem', category_id=category_id))
     else:
-        return render_template('newCategoryItem.html', category_id = category_id)
+        return render_template('newCategoryItem.html', category_id=category_id)
 
 
 # Edit a category item
-@app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods = ['GET', 'POST'])
+@app.route('/category/<int:category_id>/item/<int:item_id>/edit', methods=['GET', 'POST'])
 def editCategoryItem(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
@@ -330,11 +335,11 @@ def editCategoryItem(category_id, item_id):
         return redirect(url_for('showItem', category_id=category_id))
     else:
         item = categoryItemRepository.readByCategoryId(category_id, item_id)
-        return render_template('editCategoryItem.html', category_id = category_id, item_id = item_id, item = item)
+        return render_template('editCategoryItem.html', category_id=category_id, item_id=item_id, item=item)
 
 
 # Delete a item
-@app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods = ['GET', 'POST'])
+@app.route('/category/<int:category_id>/item/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteCategoryItem(category_id, item_id):
     if 'username' not in login_session:
         return redirect('/login')
@@ -344,11 +349,11 @@ def deleteCategoryItem(category_id, item_id):
         return redirect(url_for('showItem', category_id=category_id))
     else:
         item = categoryItemRepository.readByCategoryId(category_id, item_id)
-        return render_template('deleteCategoryItem.html', item = item)
+        return render_template('deleteCategoryItem.html', item=item)
 
 
 if __name__ == '__main__':
-    app.env='development'
-    app.secret_key='super_secret_key'
-    app.debug=True
-    app.run(host = '0.0.0.0', port = 5000)
+    app.env = 'development'
+    app.secret_key = 'super_secret_key'
+    app.debug = True
+    app.run(host='0.0.0.0', port=5000)
