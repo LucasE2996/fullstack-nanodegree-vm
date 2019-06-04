@@ -3,7 +3,9 @@
 To run this project you will need to have these tools installed:
 - vagrant
 
-## Start up vagrant with:
+## How to run the project
+
+Start up vagrant with:
 ```console
 $ vagrant up
 ```
