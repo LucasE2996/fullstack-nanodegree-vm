@@ -4,8 +4,6 @@ from models import Base, Category, CategoryItem, User
 
 engine = create_engine('sqlite:///catalog.db')
 Base.metadata.bind = engine
-# DBSession = sessionmaker(bind=engine)
-# session = DBSession()
 
 
 class CategoryRepository:
@@ -27,10 +25,11 @@ class CategoryRepository:
         return result
 
     def create(self, name, user_id):
+        """ Create new Category """
         if(len(name) < 1):
             print("the name cannot be empty!")
             return
-        myFirstCategory = Category(name=name,user_id=user_id)
+        myFirstCategory = Category(name=name, user_id=user_id)
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         session.add(myFirstCategory)
@@ -38,6 +37,7 @@ class CategoryRepository:
         session.commit()
 
     def update(self, categoryId, newName):
+        """ Update a category """
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         result = session.query(Category).filter_by(id=categoryId).first()
@@ -49,6 +49,7 @@ class CategoryRepository:
         session.commit()
 
     def delete(self, categoryId):
+        """ Delete a category """
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         result = session.query(Category).filter_by(
@@ -81,29 +82,39 @@ class CategoryItemRepository:
         print("Searching for all items in category ID: " + str(category_id))
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        result = session.query(CategoryItem).filter_by(category_id=category_id).all()
+        result = session.query(CategoryItem).filter_by(
+            category_id=category_id).all()
         return result
-    
+
     def readByCategoryId(self, category_id, item_id):
         """ Read the category item by category ID and item ID """
-        print("Searching for the item: " + str(item_id) + "in the category: " + str(category_id))
+        print("Searching for the item: " + str(item_id) +
+              "in the category: " + str(category_id))
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        result = session.query(CategoryItem).filter_by(id=item_id,category_id=category_id).first()
+        result = session.query(CategoryItem).filter_by(
+            id=item_id, category_id=category_id).first()
         return result
 
     def create(self, name, price, description, user_id, category_id):
+        """ Create new Category Item """
         if(len(name) < 1):
             print("the name cannot be empty!")
             return
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        newCategoryItem = CategoryItem(name=name, price=price, description=description, user_id=user_id, category_id=category_id)
+        newCategoryItem = CategoryItem(
+            name=name,
+            price=price,
+            description=description,
+            user_id=user_id,
+            category_id=category_id)
         session.add(newCategoryItem)
         print("commiting new category with name: " + name)
         session.commit()
 
     def update(self, categoryId, newName, newPrice, newDescription):
+        """ Update a Category Item """
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         result = session.query(CategoryItem).filter_by(id=categoryId).first()
@@ -117,6 +128,7 @@ class CategoryItemRepository:
         session.commit()
 
     def delete(self, itemId):
+        """ Delete a Category Item """
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         result = session.query(CategoryItem).filter_by(
@@ -145,6 +157,7 @@ class UserRepository:
         return result
 
     def getUserID(self, email):
+        """ Get user ID through user's e-mail """
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         user = session.query(User).filter_by(email=email).first()
@@ -153,6 +166,7 @@ class UserRepository:
         return None
 
     def create(self, name, email, picture):
+        """ Create new User """
         if(len(name) < 1):
             print("the name cannot be empty!")
             return
@@ -164,6 +178,7 @@ class UserRepository:
         session.commit()
 
     def update(self, userId, newName):
+        """ Update a User """
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         result = session.query(User).filter_by(id=userId).first()
@@ -175,6 +190,7 @@ class UserRepository:
         session.commit()
 
     def delete(self, userId):
+        """ Delete a User """
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         result = session.query(User).filter_by(
